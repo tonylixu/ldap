@@ -68,4 +68,50 @@ assets ( eet vehicles, computers, and so on), and other resources within the
 directory, and locate their position in the organization. But if the main
 purpose of the directory is to create a directory of users of IT services, then
 this structure will be less than ideal, requiring applications to do much more
-work to locate users
+work to locate users.
+### Directory as IT service
+The second theory is that the directory should be structured to represent the
+way your system (networks, servers, user applications) will need to access the
+records. In this case the structure of the LDAP directory should be optimized
+for use by such IT services.
+
+One common way to structure the directory is to split it into a unit for users,
+a unit for groups, and a unit for system-level records that applications need,
+but users will not require access to.
+
+For example, you will have three OUs in this presentation: "System", "Users",
+"Groups".
+
+This structure also has some drawbacks:
+* First, the directory structure does not, by design, provide any overt
+clues to the structure of the organization. Of course organizational
+information, such as department IDs, can be stored in individual records, and so can be retrieved that way.
+* More importantly though, if the directory supports a large number of users,
+the ou=Users branch is going to have a lot of records. But this problem can be
+mitigated by adding additional subtrees under the "Users" branch.
+
+So it is your choice of which one to use, the mirroring the organization, or
+the one facilitating IT services. In our example, we will use the IT service
+structure.
+
+### Example
+We will create three OUs - Users, Groups and System:
+```bash
+# Subtree for users
+dn: ou=Users,dc=tomosolutions,dc=com
+ou: Users
+description: tomosolutions.com Users
+objectClass: organizationalUnit
+
+# Subtree for groups
+dn: ou=Groups,dc=tomosolutions,dc=com
+ou: Groups
+description: tomosolutions.com Groups
+objectClass: organizationalUnit
+
+# Subtree for system accounts
+dn: ou=System,dc=tomosolutions,dc=com
+ou: System
+description: Special accounts used by software applications.
+objectClass: organizationalUnit
+```
