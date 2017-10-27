@@ -40,3 +40,32 @@ is used to specify the (legal) name of the organization. Additionally the
 organization object class allows twenty-one optional  elds that provide more
 detailed information about the organization, such as postalAddress,
 telephoneNumber, and location.
+
+## Define Organizational Units
+There are many ways of structuring LDAP OUs, two of them are prominent.
+### Directory as Organizational Chart
+The LDAP directory should be structured to represent the organizational chart.
+For example, if the orgnization has three main units—Accounting, Human
+Resources (HR), and Information Technology (IT)—then you should have three OUs.
+
+This way, the directory will server as a tool for understanding how
+organization is structured. Organizational relationships between people or
+records in the directory will be more easily ascertained. For example, a glance
+at the record (or just the DN) of uid=Marvin,ou=Accounting,dc=tomosolutions,dc=com,
+and you will know that Marvin works in the Accounting department.
+
+But this structure has three things to consider:
+* First, while organizational structures change—sometimes too frequently—relocating
+DNs within the directory is not an easy task.
+* Second, If user records are spread throughout the directory tree, then
+applications will need to be smart enough to search all over the tree for
+user records.
+* A third consideration has to do with what other sorts of information you want
+to store in your directory. If you are using the directory primarily as a
+tool for modeling the organizational chart, then this particular method
+of structuring the directory will be ideal for you. You can track employees,
+assets ( eet vehicles, computers, and so on), and other resources within the
+directory, and locate their position in the organization. But if the main
+purpose of the directory is to create a directory of users of IT services, then
+this structure will be less than ideal, requiring applications to do much more
+work to locate users
