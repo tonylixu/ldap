@@ -80,3 +80,9 @@ result: 0 Success
 
 +: Search for all operational results
 ```
+
+```bash
+$ ldapsearch -D cn=admin,dc=example,dc=com -w password -x -b 'dc=example,dc=com' 'cn=tony*'
+
+Search for any entry that start with tony
+```
