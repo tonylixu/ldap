@@ -1,4 +1,4 @@
-## ldapsearch commands
+## ldapsearch command
 ```bash
 $ ldapsearch -x -W -D 'cn=Manager,dc=example,dc=com' -b "" -s base
 # extended LDIF
