@@ -31,7 +31,7 @@ $ ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b cn=config  | grep "memberof"
 You should see some outputs
 ```
 
-4. Create the following two files `refint1.ldif` and `refint2.ldif`:
+4. **You might not need to do step 4 and step 5, I suggest you try step 6 first, if doesn't work, comand back here.** Create the following two files `refint1.ldif` and `refint2.ldif`:
 ```bash
 # refint1.ldif
 dn: cn=module{1},cn=config
@@ -52,4 +52,30 @@ olcRefintAttribute: memberof member manager owner
 ```bash
 $ ldapmodify -Q -Y EXTERNAL -H ldapi:/// -f ./refint1.ldif
 $ ldapadd -Q -Y EXTERNAL -H ldapi:/// -f ./refint2.ldif
+```
+Note: Every group created before this module is enabled has to be deleted and remade in order for these changes to take effect. LDAP assigns a "member" attribute behind the scenes to existing users when creating a group.
+
+6. Let's try to create a group, create a file named `add_group.ldif`:
+```bash
+cn: cn=mygroup,ou=groups,dc=lixu,dc=com
+objectClass: groupofnames
+cn: mygroup
+description: All users
+member: cn=Tony Xu,cn=Users,dc=lixu,dc=com
+```
+Note: The `Tony Xu` user must be an exist user.
+
+7. Add new group:
+```bash
+$ ldapadd -x -D cn=admin,dc=lixu,dc=com -W -f add_group.ldif
+```
+
+8. Verify the new group:
+```bash
+$ ldapsearch -D cn=admin,dc=lixu,dc=com -w password -x -b 'dc=lixu,dc=com' 'cn=tony*'
+dn: cn=mygroup,ou=groups,dc=lixu,dc=com
+objectClass: groupOfNames
+cn: mygroup
+description: All users
+member: cn=Tony Xu,cn=Users,dc=lixu,dc=com
 ```
