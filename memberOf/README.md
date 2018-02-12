@@ -4,10 +4,16 @@ In order to easily and efficiently do queries that enables you to see which user
 ### Check if MemberOf Already Enabled
 Log into your LDAP server and run the following command, do a `grep` on `memberof`, make sure it is not enabled.
 ```bash
-$ ldapsearch -Q -LLL -Y EXTERNAL -H ldapi:/// -b cn=config  | grep "memberof"
-olcModuleLoad: {1}memberof
+$ olcModuleLoad: {1}memberof
+olcModuleLoad: {0}memberof.la
+olcModuleLoad: {0}memberof.la
 dn: olcOverlay={0}memberof,olcDatabase={1}hdb,cn=config
-olcOverlay: {0}memberof
+olcOverlay: memberof
+olcRefintAttribute: memberof member manager owner
+dn: olcOverlay={2}memberof,olcDatabase={1}hdb,cn=config
+olcOverlay: {2}memberof
+olcRefintAttribute: memberof member manager owner
+olcRefintAttribute: memberof member manager owner
 ```
 In the above case, `MemberOf` feature is alrady enabled. You don't need to enable it.
 
