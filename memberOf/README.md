@@ -17,6 +17,12 @@ olcRefintAttribute: memberof member manager owner
 ```
 In the above case, `MemberOf` feature is alrady enabled. You don't need to enable it.
 
+### Create Group with MemberOf attribute
+If `Memberof` overlay is already enabled, but you still see "LDAP/AD server does not support memberOf" message, what you need to do is to create a group with `groupOfUniqueNames` attribute, this will trigger the `MemberOf` overlay when the modification is done.
+
+Let's trigger the overlay by the following example:
+
+
 ### Enabling MemberOf
 1. Create "memberof_config.ldif" file:
 ```bash
