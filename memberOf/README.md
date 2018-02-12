@@ -21,8 +21,42 @@ In the above case, `MemberOf` feature is alrady enabled. You don't need to enabl
 If `Memberof` overlay is already enabled, but you still see "LDAP/AD server does not support memberOf" message, what you need to do is to create a group with `groupOfUniqueNames` attribute, this will trigger the `MemberOf` overlay when the modification is done.
 
 Let's trigger the overlay by the following example:
+```bash
+cn: cn=mygroup,ou=groups,dc=lixu,dc=com
+objectClass: groupOfUniqueNames
+cn: mygroup
+description: Test user group
+uniqueMember: cn=Tony Xu,cn=Users,dc=lixu,dc=com
+```
 
+```bash
+$ ldapadd -x -D cn=admin,dc=lixu,dc=com -w password -f add_group.ldif
+adding new entry "cn=mygroup,ou=groups,dc=lixu,dc=com"
+```
 
+Now the `MemberOf` should be shown.
+```bash
+ldapsearch -D cn=admin,dc=lixu,dc=com -w password -x -b 'dc=lixu,dc=com' 'cn=Tony*' memberof
+# extended LDIF
+#
+# LDAPv3
+# base <dc=lixu,dc=com> with scope subtree
+# filter: cn=Tony*
+# requesting: memberof
+#
+
+# Tony Xu, users, lixu.com
+dn: cn=Tony Xu,cn=users,dc=lixu,dc=com
+memberOf: cn=mygroup,ou=groups,dc=lixu,dc=com
+
+# search result
+search: 2
+result: 0 Success
+
+# numResponses: 2
+# numEntries: 1
+
+```
 ### Enabling MemberOf
 1. Create "memberof_config.ldif" file:
 ```bash
@@ -91,3 +125,8 @@ cn: mygroup
 description: All users
 member: cn=Tony Xu,cn=Users,dc=lixu,dc=com
 ```
+
+### References
+ref1: https://technicalnotes.wordpress.com/2014/04/19/openldap-setup-with-memberof-overlay/
+ref2: https://www.adimian.com/blog/2014/10/how-to-enable-memberof-using-openldap/
+https://github.com/osixia/docker-openldap/issues/110
